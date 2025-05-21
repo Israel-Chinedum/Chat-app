@@ -1,0 +1,72 @@
+#form{
+    --background: rgb(25, 25, 25);
+    background-color: var(--background);
+    width: 400px;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 1rem;
+    border: 2px solid orangered;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#form h1{
+    color: white;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+}
+
+#form input{
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 3px;
+    margin: 10px 0px 10px 0px;
+    width: 95%;
+}
+
+#form button{
+    padding: 10px;
+    font-size: 1.2rem;
+    width: 100px;
+    border-radius: 3px;
+    background-color: orangered;
+    color: white;
+    margin-top: 10px;
+}
+
+.login-msg{
+    padding: 10px;
+    background-color: var(--background);
+    color: white;
+    border: 2px solid orangered;
+    width: max-content;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 20vh;
+    font-family: sans-serif;
+}
+
+#exit-to-landing-page{
+    width: 50px;
+    height: 50px;
+    background-color: rgba(128, 128, 128, 0.583);
+    color: white;
+    font-size: 1.3rem;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin-top: 5vh;
+}
+
+#exit-to-landing-page:hover{
+    color: orangered;
+}

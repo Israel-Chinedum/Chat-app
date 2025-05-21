@@ -1,0 +1,108 @@
+#reg-form{
+    --background: rgb(25, 25, 25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 1rem;
+    background-color: var(--background);
+    width: 400px;
+    border: 2px solid orangered;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#reg-form h1{
+    color: white;
+    font-family: sans-serif;
+    margin: 40px 0px 10px 0px;
+}
+
+#reg-form input{
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 3px;
+    margin-top: 20px;
+    width: 95%;
+}
+
+#reg-btn{
+    padding: 10px;
+    font-size: 1.2rem;
+    background-color: orangered;
+    color: white;
+    width: 50%;
+    border-radius: 3px;
+    margin: 40px 0px 40px 0px;
+}
+
+.reg-msg{
+    padding: 10px;
+    background-color: var(--background);
+    color: white;
+    border: 2px solid orangered;
+    width: max-content;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+    position: absolute;
+    left: 50%;
+    margin-top: 2vh;
+    transform: translate(-50%);
+    font-family: sans-serif;
+    z-index: 1;
+}
+
+#success-page-container{
+    color: orangered;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+#success-page-container p{
+    font-size: 1.2rem;
+    margin: 20px 0px 20px 0px;
+    color: white;
+}
+
+#success-page-container .buttons :first-child::after{
+    content: 'Back';
+    background-color: orangered;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 3px;
+    width: inherit;
+    position: absolute;
+    box-sizing: border-box;
+    margin-top: 100%;
+    transition: 0.3s;
+  }
+  
+  #success-page-container .buttons :first-child:hover::after{
+    margin-top: 0;
+  }
+  
+  #success-page-container .buttons :last-child::after{
+    content: 'Sign in';
+    background-color: white;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: orangered;
+    border-radius: 3px;
+    width: inherit;
+    position: absolute;
+    box-sizing: border-box;
+    margin-top: -100%;
+    transition: 0.3s;
+  }
+  
+  #success-page-container .buttons :last-child:hover::after{
+    margin-top: 0;
+  }

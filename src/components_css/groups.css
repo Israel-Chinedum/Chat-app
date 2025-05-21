@@ -1,0 +1,183 @@
+#group-component-container {
+  width: 1000px;
+  height: 100%;
+  margin: auto;
+  position: relative;
+}
+
+#grp-msg {
+  position: absolute;
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 1.5rem;
+  color: white;
+  left: 50%;
+  top: 5%;
+  transform: translate(-50%);
+  z-index: 1;
+}
+
+.groups-container::-webkit-scrollbar-thumb {
+  background-color: orangered;
+}
+
+.group {
+  height: 200px;
+  border-radius: 1rem;
+  border: 1px solid grey;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(15, 15, 15);
+}
+
+.grp-image {
+  width: 100%;
+  height: 85%;
+}
+
+.group p {
+  position: relative;
+  align-self: end;
+  padding: 0px 5px 0px 5px;
+}
+
+#cover {
+  width: 100%;
+  height: 250px;
+  position: relative;
+}
+
+#my-groups {
+  width: 100%;
+  height: 250px;
+  position: relative;
+  margin-top: 5%;
+}
+
+.groups-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow-x: scroll;
+  align-items: center;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+.groups-container div {
+  flex-shrink: 0;
+  width: 170px;
+  margin: 10px;
+  transition: 0.2s;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+#search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+#search-box input {
+  padding: 10px;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  width: 30vw;
+}
+
+#search-box button {
+  padding: 10px;
+  border-radius: 2rem;
+  width: 100px;
+  font-size: 1.2rem;
+  color: white;
+  background-color: orangered;
+  margin-left: 10px;
+}
+
+#groups-buttons {
+  margin-top: 5%;
+}
+
+#create-grp-popup-btn {
+  padding: 10px;
+  border-radius: 2rem;
+  background-color: orangered;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+#popup {
+  position: absolute;
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: 2px 2px 15px 10px black;
+  border: 1px solid orangered;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.811);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#popup input {
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 1.5rem;
+  margin-top: 100px;
+  text-align: center;
+}
+
+#popup button {
+  padding: 10px;
+  font-size: 1.2rem;
+  color: white;
+  border-radius: 1.5rem;
+  background-color: orangered;
+  margin-top: 20px;
+}
+
+#popup #file {
+  display: none;
+}
+
+#img-holder {
+  border: 1px solid grey;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  margin-top: 20px;
+}
+
+#img-holder img {
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+}
+
+#create-grp-btn {
+  width: 100px;
+}
+
+#popup #close-grp-popup-btn {
+  background-color: rgba(128, 128, 128, 0.454);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  align-self: end;
+  margin-bottom: 20px;
+}
+
+#popup #close-grp-popup-btn:hover {
+  color: orangered;
+}

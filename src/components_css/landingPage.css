@@ -1,0 +1,63 @@
+#landing-page-container{
+    color: white;
+    font-family: sans-serif;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #landing-page-container h1{
+    color: orangered;
+    margin-bottom: 20px;
+  }
+  
+  #landing-page-container p{
+    text-align: center;
+    width: 80%;
+}
+
+#landing-page-container p{
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+#landing-page-container .buttons :first-child::after{
+    content: 'Sign up';
+    background-color: orangered;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 3px;
+    width: inherit;
+    position: absolute;
+    box-sizing: border-box;
+    margin-top: 100%;
+    transition: 0.3s;
+  }
+  
+  #landing-page-container .buttons :first-child:hover::after{
+    margin-top: 0;
+  }
+  
+  #landing-page-container .buttons :last-child::after{
+    content: 'Sign in';
+    background-color: white;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: orangered;
+    border-radius: 3px;
+    width: inherit;
+    position: absolute;
+    box-sizing: border-box;
+    margin-top: -100%;
+    transition: 0.3s;
+  }
+  
+  #landing-page-container .buttons :last-child:hover::after{
+    margin-top: 0;
+  }

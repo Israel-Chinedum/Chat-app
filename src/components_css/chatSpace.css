@@ -1,0 +1,79 @@
+#chat-space-container {
+  background-color: rgb(14, 14, 16);
+  display: flex;
+  flex-direction: column;
+}
+
+#message-box {
+  width: 100%;
+  height: 85%;
+  overflow-y: scroll;
+  padding-left: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.recieved-msg {
+  background-color: rgba(43, 31, 28, 0.856);
+  color: white;
+  padding: 10px;
+  max-width: 50%;
+  margin: 10px;
+  align-self: start;
+  border-radius: 10px;
+  padding-left: 30px;
+  word-break: break-all;
+  border-bottom-left-radius: 50px;
+}
+
+.sent-msg {
+  --bkg-color: rgba(255, 68, 0, 0.838);
+  width: 50%;
+  background-color: var(--bkg-color);
+  word-break: break-all;
+  align-self: end;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+#messaging-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  align-self: center;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+#chat-text-area {
+  width: 70%;
+  padding: 10px;
+  outline-color: orangered;
+  font-size: 1.2rem;
+  word-spacing: -3px;
+  border-radius: 5px;
+  resize: none;
+}
+
+#chat-send-btn {
+  padding: 10px;
+  font-size: 1.2rem;
+  width: 100px;
+  background-color: orangered;
+  color: white;
+  border: 0;
+  border-radius: 3px;
+}
+
+#current-chat {
+  padding: 10px;
+  box-sizing: border-box;
+  color: white;
+  font-size: 1.2rem;
+  border-bottom: 2px dotted orangered;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}

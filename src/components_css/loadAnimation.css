@@ -1,0 +1,47 @@
+#load-container{
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--loadBkg);
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#spinner{
+    width: 50px;
+    height: 50px;
+    border: 10px dotted orangered;
+    border-radius: 50%;
+    animation: spin linear 1s infinite;
+    animation-play-state: paused;
+}
+
+#mini-load-container{
+    width: inherit;
+    height: inherit;
+    background-color: var(--loadBkg);
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#spin-div{
+    width: 30px;
+    height: 30px;
+    border: 5px dotted orangered;
+    animation: spin linear 1s infinite;
+    animation-play-state: paused;
+    border-radius: 50%;
+}
+
+@keyframes spin{
+    from{
+        transform: rotate(0deg);
+    } to{
+        transform: rotate(360deg);
+    }
+}
