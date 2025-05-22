@@ -5,6 +5,8 @@
   align-items: center;
   position: relative;
   background-color: rgb(14, 14, 16);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 #people-search {

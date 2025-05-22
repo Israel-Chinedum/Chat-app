@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   border: 0;
   --background: rgb(25, 25, 26);
@@ -6,35 +6,36 @@
   --loadBkg: rgba(0, 0, 0, 0.954);
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   background: transparent;
   width: 7px;
   height: 7px;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: orangered;
   border-radius: 1rem;
   cursor: grab;
 }
 
-#main-container{
+#main-container {
   width: 100vw;
   height: 100vh;
   background: var(--background);
   overflow: auto;
 }
 
-#container{
+#container {
   width: 100%;
   height: 100%;
   display: grid;
   grid-template-columns: repeat(2, 500px);
   grid-template-rows: 95%;
   place-content: center;
+  border-radius: 10px;
 }
 
-.exit-to-landing-page{
+.exit-to-landing-page {
   width: 50px;
   height: 50px;
   background-color: rgba(128, 128, 128, 0.583);
@@ -47,15 +48,15 @@
   margin-top: 3vh;
 }
 
-.exit-to-landing-page:hover{
+.exit-to-landing-page:hover {
   color: orangered;
 }
 
-.buttons{
+.buttons {
   display: flex;
 }
 
-.buttons :first-child{
+.buttons :first-child {
   padding: 10px;
   font-size: 1.2rem;
   color: orangered;
@@ -70,7 +71,7 @@
   overflow: hidden;
 }
 
-.buttons :last-child{
+.buttons :last-child {
   padding: 10px;
   font-size: 1.2rem;
   color: white;

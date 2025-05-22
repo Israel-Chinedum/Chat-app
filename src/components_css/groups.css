@@ -1,183 +1,151 @@
-#group-component-container {
-  width: 1000px;
-  height: 100%;
+#groups-container {
+  width: 80vw;
+  height: 87vh;
   margin: auto;
-  position: relative;
+  --hover-color: rgb(39, 39, 39);
 }
 
-#grp-msg {
-  position: absolute;
-  padding: 10px;
-  font-size: 1.2rem;
-  border-radius: 1.5rem;
-  color: white;
-  left: 50%;
-  top: 5%;
-  transform: translate(-50%);
-  z-index: 1;
-}
-
-.groups-container::-webkit-scrollbar-thumb {
-  background-color: orangered;
-}
-
-.group {
-  height: 200px;
-  border-radius: 1rem;
-  border: 1px solid grey;
+/* ===== NAV BAR ===== */
+#nav-bar {
+  padding: 20px;
   box-sizing: border-box;
+}
+
+#nav-bar #tabs {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#tabs .tab {
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  background-color: rgb(15, 15, 15);
+  padding: 10px;
+  border-radius: 5px;
 }
 
-.grp-image {
-  width: 100%;
-  height: 85%;
+#tabs .tab:hover {
+  background: var(--hover-color);
+  color: orangered;
 }
 
-.group p {
-  position: relative;
-  align-self: end;
-  padding: 0px 5px 0px 5px;
+/* ===== ALL GROUPS ===== */
+#all-groups {
+  width: 70%;
+  margin: auto;
 }
 
-#cover {
-  width: 100%;
-  height: 250px;
-  position: relative;
+.groups {
+  padding: 0;
 }
 
-#my-groups {
-  width: 100%;
-  height: 250px;
-  position: relative;
-  margin-top: 5%;
-}
-
-.groups-container {
-  width: 100%;
-  height: 100%;
+.groups .group {
   display: flex;
-  overflow-x: scroll;
-  align-items: center;
-  position: relative;
-  scroll-behavior: smooth;
-}
-
-.groups-container div {
-  flex-shrink: 0;
-  width: 170px;
-  margin: 10px;
-  transition: 0.2s;
-  background-position: center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-
-#search-box {
-  display: flex;
-  justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 20px;
-}
-
-#search-box input {
   padding: 10px;
-  border-radius: 2rem;
-  font-size: 1.2rem;
-  width: 30vw;
+  border-radius: 7px;
+  margin: 0;
 }
 
-#search-box button {
-  padding: 10px;
-  border-radius: 2rem;
-  width: 100px;
-  font-size: 1.2rem;
-  color: white;
-  background-color: orangered;
-  margin-left: 10px;
+.groups .group:hover {
+  background-color: var(--hover-color);
 }
 
-#groups-buttons {
-  margin-top: 5%;
+.groups .grp-name {
+  margin-left: 20px;
 }
 
-#create-grp-popup-btn {
-  padding: 10px;
-  border-radius: 2rem;
-  background-color: orangered;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-#popup {
-  position: absolute;
-  padding: 20px;
-  border-radius: 1rem;
-  box-shadow: 2px 2px 15px 10px black;
+.img-container {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
   border: 1px solid orangered;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.811);
+}
+
+.img-container img {
+  width: inherit;
+  height: inherit;
+}
+
+/* ===== USER/MY GROUPS ===== */
+#my-groups {
+  width: 70%;
+  margin: auto;
+}
+
+.groups .user-group {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+.groups .user-group:hover {
+  background-color: var(--hover-color);
+}
+
+.user-group div {
+  display: flex;
+  align-items: center;
+}
+
+.user-group :nth-child(2) button {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  font-size: 15px;
+  margin: 5px;
+  color: white;
+}
+
+.user-group :nth-child(2) .edit-btn {
+  background-color: orangered;
+}
+
+.user-group :nth-child(2) .delete-btn {
+  background-color: rgb(61, 60, 60);
+}
+
+/* ===== NEW GROUP ===== */
+#new-grp-form {
+  width: 50%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#popup input {
-  padding: 10px;
-  font-size: 1.2rem;
-  border-radius: 1.5rem;
-  margin-top: 100px;
-  text-align: center;
-}
-
-#popup button {
-  padding: 10px;
-  font-size: 1.2rem;
-  color: white;
-  border-radius: 1.5rem;
-  background-color: orangered;
-  margin-top: 20px;
-}
-
-#popup #file {
-  display: none;
-}
-
-#img-holder {
-  border: 1px solid grey;
-  width: 300px;
-  height: 300px;
+#image-holder {
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  margin-top: 20px;
+  border: 2px solid white;
+  margin-bottom: 20px;
+  overflow: hidden;
 }
 
-#img-holder img {
+#image-holder img {
   width: inherit;
   height: inherit;
-  border-radius: 50%;
+  object-fit: cover;
+  background-position: center;
 }
 
-#create-grp-btn {
-  width: 100px;
+.btn {
+  padding: 10px;
+  width: 150px;
+  background-color: orangered;
+  color: white;
+  border-radius: 5px;
+  font-size: 15px;
 }
 
-#popup #close-grp-popup-btn {
-  background-color: rgba(128, 128, 128, 0.454);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  align-self: end;
-  margin-bottom: 20px;
-}
-
-#popup #close-grp-popup-btn:hover {
-  color: orangered;
+#new-grp-form #group-name {
+  padding: 10px;
+  width: 250px;
+  font-size: 15px;
+  margin: 50px 0px 20px 0px;
+  border-radius: 5px;
+  outline: none;
 }
