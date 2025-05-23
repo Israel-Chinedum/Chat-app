@@ -121,7 +121,7 @@
   height: 200px;
   border-radius: 50%;
   border: 2px solid white;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   overflow: hidden;
 }
 
@@ -148,4 +148,23 @@
   margin: 50px 0px 20px 0px;
   border-radius: 5px;
   outline: none;
+}
+
+#img-name {
+  margin-bottom: 20px;
+  width: 400px;
+  text-align: center;
+  overflow: hidden;
+}
+
+#grp-msg {
+  position: relative;
+  left: 50%;
+  translate: -50%;
+  z-index: 1;
+  border: 1px solid orangered;
+  color: white;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20px;
 }

@@ -1,10 +1,52 @@
 import "../components_css/groups.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
+import { socketContext } from "./MyContext";
+import { display } from "../customHooks/useDisplay";
 
 export const Groups = () => {
+  const socket = useContext(socketContext);
+  const { onDisplay, setDisplay } = display(3000);
+
   const [currTab, setCurrTab] = useState<string>("all-groups");
-  const [imgSrc, setImgSrc] = useState<string>();
+  const [imgSrc, setImgSrc] = useState<string>("/group_image.png");
+  const [fileName, setFileName] = useState<string>("No image selected");
+  const [isPending, setPending] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const groupName = useRef<HTMLInputElement>(null);
+  const msg = useRef<string>("");
   const file = useRef<HTMLInputElement>(null);
+
+  const readFile = () => {
+    if (file.current?.files) {
+      const reader = new FileReader();
+      const currFile = file.current.files[0];
+      reader.onload = () => {
+        const image = {
+          name: currFile.name,
+          type: currFile.type,
+          buffer: reader.result as ArrayBuffer,
+        };
+        socket.emit(
+          "new-group",
+          {
+            groupName: groupName.current?.value,
+            image,
+          },
+          () => {
+            msg.current = "Pending...";
+            setPending(true);
+          }
+        );
+        reader.readAsArrayBuffer(currFile);
+      };
+    }
+  };
+
+  // useEffect(() => {
+  //   if (!isPending) {
+
+  //   }
+  // }, [isPending]);
 
   return (
     <div id="groups-container">
@@ -24,6 +66,7 @@ export const Groups = () => {
       </nav>
 
       <div>
+        {onDisplay && <p id="grp-msg">{msg.current}</p>}
         {/* ===== ALL GROUPS ===== */}
         {currTab == "all-groups" && (
           <section id="all-groups">
@@ -65,15 +108,17 @@ export const Groups = () => {
               <div id="image-holder">
                 <img src={imgSrc} alt="" />
               </div>
-              <p id="img-name"></p>
+              <p id="img-name">{fileName}</p>
               <input
                 ref={file}
                 type="file"
                 accept=".jpg, .png, .jpeg, .jfif"
                 style={{ display: "none" }}
                 onChange={(e) => {
-                  e.target.files &&
+                  if (e.target.files) {
                     setImgSrc(`${URL.createObjectURL(e.target.files[0])}`);
+                    setFileName(e.target.files[0].name);
+                  }
                 }}
               />
               <button
@@ -88,8 +133,20 @@ export const Groups = () => {
                 type="text"
                 id="group-name"
                 placeholder="Enter group name"
+                ref={groupName}
               />
-              <button className="btn">Create</button>
+              <button
+                className="btn"
+                onClick={() => {
+                  if (groupName.current?.value != null) {
+                    readFile();
+                  } else {
+                    setError(true);
+                  }
+                }}
+              >
+                Create
+              </button>
             </div>
           </section>
         )}
