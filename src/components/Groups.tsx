@@ -2,16 +2,18 @@ import "../components_css/groups.css";
 import { useState, useRef, useContext, useEffect } from "react";
 import { socketContext } from "./MyContext";
 import { display } from "../customHooks/useDisplay";
+import { MiniLoadAnimation } from "./LoadAnimation";
 
 export const Groups = () => {
   const socket = useContext(socketContext);
-  const { onDisplay, setDisplay } = display(3000);
+  const { onDisplay, setDisplay, showing, setShowing } = display(3000);
 
   const [currTab, setCurrTab] = useState<string>("all-groups");
+  const [updateKey, setUpdateKey] = useState<number>(0);
   const [imgSrc, setImgSrc] = useState<string>("/group_image.png");
   const [fileName, setFileName] = useState<string>("No image selected");
   const [isPending, setPending] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  // const [error, setError] = useState<boolean>(false);
   const groupName = useRef<HTMLInputElement>(null);
   const msg = useRef<string>("");
   const file = useRef<HTMLInputElement>(null);
@@ -26,27 +28,39 @@ export const Groups = () => {
           type: currFile.type,
           buffer: reader.result as ArrayBuffer,
         };
-        socket.emit(
-          "new-group",
-          {
-            groupName: groupName.current?.value,
-            image,
-          },
-          () => {
-            msg.current = "Pending...";
-            setPending(true);
-          }
-        );
-        reader.readAsArrayBuffer(currFile);
+        console.log("about to read");
+
+        socket.emit("new-group", {
+          groupName: groupName.current?.value,
+          image,
+        });
       };
+      reader.readAsArrayBuffer(currFile);
     }
   };
 
-  // useEffect(() => {
-  //   if (!isPending) {
+  useEffect(() => {
+    socket.on("new-group", () => {
+      setPending(false);
+      msg.current = "Group has been created!";
+      setUpdateKey((prevKey) => prevKey + 1);
+      setImgSrc("/group_image.png");
+      setFileName("No image selected");
+      setTimeout(() => {
+        setShowing(false);
+      }, 3000);
+    });
 
-  //   }
-  // }, [isPending]);
+    socket.on("error", (errMsg: string) => {
+      setPending(false);
+      msg.current = errMsg;
+      setTimeout(() => {
+        setShowing(false);
+      }, 3000);
+    });
+
+    return () => socket.off("new-group");
+  }, []);
 
   return (
     <div id="groups-container">
@@ -66,7 +80,7 @@ export const Groups = () => {
       </nav>
 
       <div>
-        {onDisplay && <p id="grp-msg">{msg.current}</p>}
+        {showing && <p id="grp-msg">{msg.current}</p>}
         {/* ===== ALL GROUPS ===== */}
         {currTab == "all-groups" && (
           <section id="all-groups">
@@ -104,17 +118,24 @@ export const Groups = () => {
         {/* ===== NEW GROUP ===== */}
         {currTab == "new-group" && (
           <section id="new-group">
+            <MiniLoadAnimation
+              loading={isPending}
+              width={"100%"}
+              height={"100%"}
+            />
             <div id="new-grp-form">
               <div id="image-holder">
                 <img src={imgSrc} alt="" />
               </div>
               <p id="img-name">{fileName}</p>
               <input
+                key={updateKey}
                 ref={file}
                 type="file"
                 accept=".jpg, .png, .jpeg, .jfif"
                 style={{ display: "none" }}
                 onChange={(e) => {
+                  console.log("changed");
                   if (e.target.files) {
                     setImgSrc(`${URL.createObjectURL(e.target.files[0])}`);
                     setFileName(e.target.files[0].name);
@@ -139,9 +160,12 @@ export const Groups = () => {
                 className="btn"
                 onClick={() => {
                   if (groupName.current?.value != null) {
+                    console.log("clicked create!");
                     readFile();
+                    setPending(true);
+                    setShowing(true);
                   } else {
-                    setError(true);
+                    msg.current;
                   }
                 }}
               >
