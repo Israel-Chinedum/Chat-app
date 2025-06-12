@@ -6,22 +6,57 @@ import { MiniLoadAnimation } from "./LoadAnimation";
 
 export const Groups = () => {
   const socket = useContext(socketContext);
-  const { onDisplay, setDisplay, showing, setShowing } = display(3000);
+  const { showing, setShowing } = display();
 
+  type imgObj = {
+    name: string;
+    type: string;
+    buffer: ArrayBuffer;
+  };
+
+  type groupData = {
+    groupName: string;
+    groupImage:
+      | {
+          type: string;
+          buffer: Buffer;
+        }
+      | string;
+  };
+
+  type groupInfo = {
+    groupName: string;
+    groupImage: string;
+  };
+
+  const [allGrpList, setAllGrpList] = useState<groupInfo[]>([]);
+  const [myGrpList, setMyGrpList] = useState<groupInfo[]>([]);
   const [currTab, setCurrTab] = useState<string>("all-groups");
   const [updateKey, setUpdateKey] = useState<number>(0);
   const [imgSrc, setImgSrc] = useState<string>("/group_image.png");
   const [fileName, setFileName] = useState<string>("No image selected");
   const [isPending, setPending] = useState<boolean>(false);
-  // const [error, setError] = useState<boolean>(false);
+  const mounted = useRef<boolean>(false);
   const groupName = useRef<HTMLInputElement>(null);
   const msg = useRef<string>("");
   const file = useRef<HTMLInputElement>(null);
+
+  const isObject = (
+    data: groupData["groupImage"]
+  ): data is { type: string; buffer: Buffer } => {
+    return (
+      typeof data === "object" &&
+      data !== null &&
+      "type" in data &&
+      "buffer" in data
+    );
+  };
 
   const readFile = () => {
     if (file.current?.files) {
       const reader = new FileReader();
       const currFile = file.current.files[0];
+      console.log(file.current.files);
       reader.onload = () => {
         const image = {
           name: currFile.name,
@@ -29,20 +64,32 @@ export const Groups = () => {
           buffer: reader.result as ArrayBuffer,
         };
         console.log("about to read");
-
-        socket.emit("new-group", {
-          groupName: groupName.current?.value,
-          image,
-        });
+        emitRequest(image);
       };
       reader.readAsArrayBuffer(currFile);
     }
   };
 
+  const emitRequest = (image?: imgObj) => {
+    setPending(true);
+    socket.emit("new-group", {
+      groupName: groupName.current?.value,
+      image: image || "no image",
+    });
+  };
+
   useEffect(() => {
+    const componentMounted = mounted.current;
+
+    if (componentMounted) {
+      socket.emit("get-groups");
+      socket.emit("get-myGroups");
+    }
+
     socket.on("new-group", () => {
       setPending(false);
       msg.current = "Group has been created!";
+      setShowing(true);
       setUpdateKey((prevKey) => prevKey + 1);
       setImgSrc("/group_image.png");
       setFileName("No image selected");
@@ -54,12 +101,74 @@ export const Groups = () => {
     socket.on("error", (errMsg: string) => {
       setPending(false);
       msg.current = errMsg;
+      setShowing(true);
       setTimeout(() => {
         setShowing(false);
       }, 3000);
     });
 
-    return () => socket.off("new-group");
+    //=====GET ALL GROUPS LIST=====
+    socket.on("groupList", async (data: groupData[]) => {
+      // console.log(data);
+      const allGrps = [];
+      for (let i of data) {
+        if (isObject(i.groupImage)) {
+          // console.log("I :", i);
+          const blob = await fetch(
+            `data:${i.groupImage.type};base64,${i.groupImage.buffer}`
+          ).then((res) => res.blob());
+          const src = URL.createObjectURL(blob);
+          // console.log("SRC: ", src);
+          allGrps.push({
+            groupName: i.groupName,
+            groupImage: src,
+          });
+        } else {
+          allGrps.push({
+            groupName: i.groupName,
+            groupImage: imgSrc,
+          });
+        }
+      }
+      allGrps.sort((a: any, b: any) => a.groupName.localeCompare(b.groupName));
+      setAllGrpList(allGrps);
+    });
+
+    //=====GET MY GROUPS LIST=====
+    socket.on("myGroupList", async (data: groupData[]) => {
+      console.log(data);
+      const grpList = [];
+      for (let i of data) {
+        if (isObject(i.groupImage)) {
+          // console.log("I :", i);
+          const blob = await fetch(
+            `data:${i.groupImage.type};base64,${i.groupImage.buffer}`
+          ).then((res) => res.blob());
+          const src = URL.createObjectURL(blob);
+          // console.log("SRC: ", src);
+          grpList.push({
+            groupName: i.groupName,
+            groupImage: src,
+          });
+        } else {
+          grpList.push({
+            groupName: i.groupName,
+            groupImage: imgSrc,
+          });
+        }
+      }
+      grpList.sort((a: any, b: any) => a.groupName.localeCompare(b.groupName));
+      console.log(grpList);
+      setMyGrpList(grpList);
+    });
+
+    return () => {
+      socket.off("new-group");
+      socket.off("error");
+      socket.off("groupList");
+      socket.off("myGroupList");
+      mounted.current = true;
+    };
   }, []);
 
   return (
@@ -85,12 +194,19 @@ export const Groups = () => {
         {currTab == "all-groups" && (
           <section id="all-groups">
             <ul className="groups">
-              <li className="group">
-                <div className="img-container">
-                  <img className="grp-img" alt="No image" />
-                </div>
-                <p className="grp-name">Group Name</p>
-              </li>
+              {allGrpList.length !== 0 &&
+                allGrpList.map((grp, index) => (
+                  <li className="group" key={index}>
+                    <div className="img-container">
+                      <img
+                        src={grp.groupImage}
+                        className="grp-img"
+                        // alt="No image"
+                      />
+                    </div>
+                    <p className="grp-name">{grp.groupName}</p>
+                  </li>
+                ))}
             </ul>
           </section>
         )}
@@ -99,18 +215,25 @@ export const Groups = () => {
         {currTab == "my-groups" && (
           <section id="my-groups">
             <ul className="groups">
-              <li className="user-group">
-                <div>
-                  <div className="img-container">
-                    <img className="grp-img" alt="No image" />
-                  </div>
-                  <p className="grp-name">Group Name</p>
-                </div>
-                <div>
-                  <button className="edit-btn">edit</button>
-                  <button className="delete-btn">delete</button>
-                </div>
-              </li>
+              {myGrpList.length !== 0 &&
+                myGrpList.map((grp, index) => (
+                  <li className="user-group" key={index}>
+                    <div>
+                      <div className="img-container">
+                        <img
+                          className="grp-img"
+                          src={grp.groupImage}
+                          // alt="No image"
+                        />
+                      </div>
+                      <p className="grp-name">{grp.groupName}</p>
+                    </div>
+                    <div>
+                      <button className="edit-btn">edit</button>
+                      <button className="delete-btn">delete</button>
+                    </div>
+                  </li>
+                ))}
             </ul>
           </section>
         )}
@@ -159,13 +282,17 @@ export const Groups = () => {
               <button
                 className="btn"
                 onClick={() => {
-                  if (groupName.current?.value != null) {
+                  if (groupName.current?.value != "") {
                     console.log("clicked create!");
-                    readFile();
-                    setPending(true);
-                    setShowing(true);
+                    file.current?.files?.length != 0
+                      ? readFile()
+                      : emitRequest();
                   } else {
-                    msg.current;
+                    msg.current = "Please enter group name!";
+                    setShowing(true);
+                    setTimeout(() => {
+                      setShowing(false);
+                    }, 3000);
                   }
                 }}
               >

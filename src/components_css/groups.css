@@ -54,13 +54,16 @@
 
 .groups .grp-name {
   margin-left: 20px;
+  width: 150px;
+  overflow: hidden;
 }
 
 .img-container {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  border: 1px solid orangered;
+  border: 4px dotted orangered;
+  overflow: hidden;
 }
 
 .img-container img {
