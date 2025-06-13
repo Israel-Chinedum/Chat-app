@@ -197,14 +197,17 @@ export const Groups = () => {
               {allGrpList.length !== 0 &&
                 allGrpList.map((grp, index) => (
                   <li className="group" key={index}>
-                    <div className="img-container">
-                      <img
-                        src={grp.groupImage}
-                        className="grp-img"
-                        // alt="No image"
-                      />
+                    <div>
+                      <div className="img-container">
+                        <img
+                          src={grp.groupImage}
+                          className="grp-img"
+                          // alt="No image"
+                        />
+                      </div>
+                      <p className="grp-name">{grp.groupName}</p>
                     </div>
-                    <p className="grp-name">{grp.groupName}</p>
+                    <button className="join-btn">Join</button>
                   </li>
                 ))}
             </ul>
