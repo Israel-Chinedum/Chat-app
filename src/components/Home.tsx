@@ -1,5 +1,5 @@
-import { Chat } from "./Chat";
-import { Groups } from "./Groups";
+import { Chat } from "./Chat/Chat";
+import { Groups } from "./Group/Groups";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {

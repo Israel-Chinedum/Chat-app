@@ -3,6 +3,8 @@
   height: 87vh;
   margin: auto;
   --hover-color: rgb(39, 39, 39);
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== NAV BAR ===== */
@@ -29,6 +31,11 @@
   color: orangered;
 }
 
+#grp-container-sections {
+  height: 100%;
+  overflow-y: scroll;
+}
+
 /* ===== ALL GROUPS ===== */
 #all-groups {
   width: 70%;
@@ -37,16 +44,6 @@
 
 .groups {
   padding: 0;
-}
-
-.groups .group {
-  display: grid;
-  grid-template-columns: 67% 30%;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
-  border-radius: 7px;
-  margin: 0;
 }
 
 .groups .group:hover {
@@ -94,11 +91,15 @@
   max-width: 150px;
 }
 
-.groups .user-group {
-  display: flex;
-  justify-content: space-between;
-  border-radius: 7px;
+.groups .group,
+.user-group {
+  display: grid;
+  grid-template-columns: 67% 30%;
+  align-items: center;
+  width: 100%;
   padding: 10px;
+  border-radius: 7px;
+  margin: 0;
 }
 
 .groups .user-group:hover {
@@ -108,6 +109,10 @@
 .user-group div {
   display: flex;
   align-items: center;
+}
+
+.user-group :nth-child(1) {
+  overflow: hidden;
 }
 
 .user-group :nth-child(2) button {

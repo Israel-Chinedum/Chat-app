@@ -1,8 +1,8 @@
-import "../components_css/friends.css";
+import "../../components_css/Chat_CSS/friends.css";
 import { useState, useEffect, useContext } from "react";
-import { useFetch } from "../customHooks/useFetch";
-import { MiniLoadAnimation } from "./LoadAnimation";
-import { CurrentChat, User, ChatType } from "./MyContext";
+import { useFetch } from "../../customHooks/useFetch";
+import { MiniLoadAnimation } from "../Animation/LoadAnimation";
+import { CurrentChat, User, ChatType } from "../MyContext";
 
 export const Friends = () => {
   type people = {

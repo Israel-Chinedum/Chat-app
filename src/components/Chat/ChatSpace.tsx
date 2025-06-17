@@ -5,10 +5,10 @@ import {
   useLayoutEffect,
   useContext,
 } from "react";
-import { socketContext } from "./MyContext";
-import "../components_css/chatSpace.css";
-import { useFetch } from "../customHooks/useFetch";
-import { CurrentChat } from "./MyContext";
+import { socketContext } from "../MyContext";
+import "../../components_css/Chat_CSS/chatSpace.css";
+import { useFetch } from "../../customHooks/useFetch";
+import { CurrentChat } from "../MyContext";
 
 export const ChatSpace = () => {
   const socket = useContext(socketContext);

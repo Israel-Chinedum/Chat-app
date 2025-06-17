@@ -1,8 +1,8 @@
-import "../components_css/groups.css";
+import "../../components_css/Group_CSS/groups.css";
 import { useState, useRef, useContext, useEffect } from "react";
-import { socketContext } from "./MyContext";
-import { display } from "../customHooks/useDisplay";
-import { MiniLoadAnimation } from "./LoadAnimation";
+import { socketContext } from "../MyContext";
+import { display } from "../../customHooks/useDisplay";
+import { MiniLoadAnimation } from "../Animation/LoadAnimation";
 
 export const Groups = () => {
   const socket = useContext(socketContext);
@@ -188,7 +188,7 @@ export const Groups = () => {
         </ul>
       </nav>
 
-      <div>
+      <div id="grp-container-sections">
         {showing && <p id="grp-msg">{msg.current}</p>}
         {/* ===== ALL GROUPS ===== */}
         {currTab == "all-groups" && (
