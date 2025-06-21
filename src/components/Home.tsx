@@ -1,7 +1,9 @@
 import { Chat } from "./Chat/Chat";
 import { Groups } from "./Group/Groups";
+import { Notifications } from "./Notifications";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { initiateId } from "./UserId";
 import {
   socketContext,
   CurrentChat,
@@ -35,6 +37,7 @@ export const Home = () => {
   useEffect(() => {
     if (user.id && !socket) {
       setSocket(io("http://localhost:2400", { auth: { userId: user.id } }));
+      initiateId(user.id);
     }
     console.log(user);
   }, [user]);
@@ -70,11 +73,15 @@ export const Home = () => {
                       <li onClick={() => setSpace("chat")}>Chats</li>
                       <li onClick={() => setSpace("people")}>Profile</li>
                       <li onClick={() => setSpace("groups")}>Groups</li>
+                      <li onClick={() => setSpace("notifications")}>
+                        Notification
+                      </li>
                     </ul>
                   </nav>
                   <div id="home-body">
                     {currentSpace == "chat" && <Chat />}
                     {currentSpace == "groups" && <Groups />}
+                    {currentSpace == "notifications" && <Notifications />}
                   </div>
                 </div>
               </ChatType.Provider>

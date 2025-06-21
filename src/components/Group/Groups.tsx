@@ -1,4 +1,5 @@
 import "../../components_css/Group_CSS/groups.css";
+import { getUserId } from "../UserId";
 import { useState, useRef, useContext, useEffect } from "react";
 import { socketContext } from "../MyContext";
 import { display } from "../../customHooks/useDisplay";
@@ -16,6 +17,7 @@ export const Groups = () => {
 
   type groupData = {
     groupName: string;
+    member: Boolean;
     groupImage:
       | {
           type: string;
@@ -24,12 +26,18 @@ export const Groups = () => {
       | string;
   };
 
+  type groupArr = {
+    groupName: string;
+    member: Boolean;
+    groupImage: string;
+  };
+
   type groupInfo = {
     groupName: string;
     groupImage: string;
   };
 
-  const [allGrpList, setAllGrpList] = useState<groupInfo[]>([]);
+  const [allGrpList, setAllGrpList] = useState<groupArr[]>([]);
   const [myGrpList, setMyGrpList] = useState<groupInfo[]>([]);
   const [currTab, setCurrTab] = useState<string>("all-groups");
   const [updateKey, setUpdateKey] = useState<number>(0);
@@ -121,14 +129,17 @@ export const Groups = () => {
           // console.log("SRC: ", src);
           allGrps.push({
             groupName: i.groupName,
+            member: i.member,
             groupImage: src,
           });
         } else {
           allGrps.push({
             groupName: i.groupName,
+            member: i.member,
             groupImage: imgSrc,
           });
         }
+        console.log(i.member);
       }
       allGrps.sort((a: any, b: any) => a.groupName.localeCompare(b.groupName));
       setAllGrpList(allGrps);
@@ -207,7 +218,11 @@ export const Groups = () => {
                       </div>
                       <p className="grp-name">{grp.groupName}</p>
                     </div>
-                    <button className="join-btn">Join</button>
+                    {!grp.member ? (
+                      <button className="join-btn">Join</button>
+                    ) : (
+                      <button className="enter-btn">Enter</button>
+                    )}
                   </li>
                 ))}
             </ul>

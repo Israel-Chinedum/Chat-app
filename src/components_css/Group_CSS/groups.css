@@ -3,6 +3,7 @@
   height: 87vh;
   margin: auto;
   --hover-color: rgb(39, 39, 39);
+  --darkGrey: rgb(61, 60, 60);
   display: flex;
   flex-direction: column;
 }
@@ -50,10 +51,11 @@
   background-color: var(--hover-color);
 }
 
-.group :nth-child(1) {
-  display: flex;
-  align-items: center;
+.group > div:nth-of-type(1) {
   overflow: hidden;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  align-items: center;
 }
 
 .group .join-btn {
@@ -67,9 +69,21 @@
   justify-self: end;
 }
 
+.group .enter-btn {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  font-size: 15px;
+  margin: 5px;
+  color: orangered;
+  background-color: var(--darkGrey);
+  justify-self: end;
+}
+
 .img-container {
   width: 70px;
   height: 70px;
+  min-height: 70px;
   border-radius: 50%;
   border: 2px dashed orangered;
   overflow: hidden;
@@ -88,18 +102,19 @@
 
 .groups .grp-name {
   margin-left: 20px;
-  max-width: 150px;
+  width: max-content;
 }
 
 .groups .group,
 .user-group {
   display: grid;
-  grid-template-columns: 67% 30%;
+  grid-template-columns: 69% 30%;
   align-items: center;
   width: 100%;
   padding: 10px;
   border-radius: 7px;
   margin: 0;
+  grid-gap: 4px;
 }
 
 .groups .user-group:hover {
@@ -111,11 +126,18 @@
   align-items: center;
 }
 
-.user-group :nth-child(1) {
+.user-group > div:nth-of-type(1) {
   overflow: hidden;
+  display: grid;
+  grid-template-columns: 15% 85%;
 }
 
-.user-group :nth-child(2) button {
+.user-group > div:nth-of-type(2) {
+  justify-content: end;
+  justify-self: end;
+}
+
+.user-group > div:nth-of-type(2) button {
   padding: 10px;
   border-radius: 5px;
   width: 100px;
@@ -129,7 +151,8 @@
 }
 
 .user-group :nth-child(2) .delete-btn {
-  background-color: rgb(61, 60, 60);
+  background-color: var(--darkGrey);
+  color: orangered;
 }
 
 /* ===== NEW GROUP ===== */
