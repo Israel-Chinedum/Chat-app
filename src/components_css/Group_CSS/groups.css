@@ -1,0 +1,225 @@
+#groups-container {
+  width: 80vw;
+  height: 87vh;
+  margin: auto;
+  --hover-color: rgb(39, 39, 39);
+  --darkGrey: rgb(61, 60, 60);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== NAV BAR ===== */
+#nav-bar {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#nav-bar #tabs {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#tabs .tab {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#tabs .tab:hover {
+  background: var(--hover-color);
+  color: orangered;
+}
+
+#grp-container-sections {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+/* ===== ALL GROUPS ===== */
+#all-groups {
+  width: 70%;
+  margin: auto;
+}
+
+.groups {
+  padding: 0;
+}
+
+.groups .group:hover {
+  background-color: var(--hover-color);
+}
+
+.group > div:nth-of-type(1) {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  align-items: center;
+}
+
+.group .join-btn {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  font-size: 15px;
+  margin: 5px;
+  color: white;
+  background-color: orangered;
+  justify-self: end;
+}
+
+.group .enter-btn {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  font-size: 15px;
+  margin: 5px;
+  color: orangered;
+  background-color: var(--darkGrey);
+  justify-self: end;
+}
+
+.img-container {
+  width: 70px;
+  height: 70px;
+  min-height: 70px;
+  border-radius: 50%;
+  border: 2px dashed orangered;
+  overflow: hidden;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== USER/MY GROUPS ===== */
+#my-groups {
+  width: 70%;
+  margin: auto;
+}
+
+.groups .grp-name {
+  margin-left: 20px;
+  width: max-content;
+}
+
+.groups .group,
+.user-group {
+  display: grid;
+  grid-template-columns: 69% 30%;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border-radius: 7px;
+  margin: 0;
+  grid-gap: 4px;
+}
+
+.groups .user-group:hover {
+  background-color: var(--hover-color);
+}
+
+.user-group div {
+  display: flex;
+  align-items: center;
+}
+
+.user-group > div:nth-of-type(1) {
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 15% 85%;
+}
+
+.user-group > div:nth-of-type(2) {
+  justify-content: end;
+  justify-self: end;
+}
+
+.user-group > div:nth-of-type(2) button {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  font-size: 15px;
+  margin: 5px;
+  color: white;
+}
+
+.user-group :nth-child(2) .edit-btn {
+  background-color: orangered;
+}
+
+.user-group :nth-child(2) .delete-btn {
+  background-color: var(--darkGrey);
+  color: orangered;
+}
+
+/* ===== NEW GROUP ===== */
+#new-group {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#new-grp-form {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#image-holder {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+#image-holder img {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+  background-position: center;
+}
+
+.btn {
+  padding: 10px;
+  width: 150px;
+  background-color: orangered;
+  color: white;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+#new-grp-form #group-name {
+  padding: 10px;
+  width: 250px;
+  font-size: 15px;
+  margin: 50px 0px 20px 0px;
+  border-radius: 5px;
+  outline: none;
+}
+
+#img-name {
+  margin-bottom: 20px;
+  width: 400px;
+  text-align: center;
+  overflow: hidden;
+}
+
+#grp-msg {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+  z-index: 1;
+  border: 1px solid orangered;
+  color: black;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: white;
+}

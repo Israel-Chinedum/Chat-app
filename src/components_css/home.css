@@ -1,0 +1,33 @@
+#home-container{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 10% 88%;
+    color: rgb(220, 217, 217);
+}
+
+#navigations{
+    border-bottom: 2px solid grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+#navigations ul{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.2rem;
+    list-style: none;
+}
+
+#navigations ul li{
+    padding: 10px;
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#navigations ul li:hover{
+   color: orangered;
+   background-color: rgb(55, 55, 55);
+}
