@@ -1,56 +1,57 @@
 import { createContext, ReactNode, useRef, useState } from "react";
-import { cn } from "../lib/utils";
+import { cn } from "../utils/cn.util";
 
 type msg = {
   text: string;
-  duration?: number;
+  duration?: number | false;
+  status: "success" | "error" | "normal";
 };
-
-type status = "success" | "error" | "normal";
 
 export const MessageContext = createContext<
   | {
       showMessage: (arg: msg) => void;
-      status: status;
-      setStatus: (arg: status) => void;
+      clearMessage: () => void;
     }
   | undefined
 >(undefined);
 
 export const MessageProvider = ({ children }: { children: ReactNode }) => {
-  const [message, setMessage] = useState<string | null>(null);
-  const [status, setStatus] = useState<status>("normal");
+  const [message, setMessage] = useState<msg | null>(null);
   const timeout = useRef<number>(undefined);
 
-  const showMessage = ({ text, duration }: msg) => {
+  // ====== SHOW MESSAGE ======
+  const showMessage = ({ text, duration = 3000, status }: msg) => {
     clearTimeout(timeout?.current);
 
-    // if (duration) {
-    //   timeout.current = setTimeout(() => {
-    //     setMessage(null);
-    //   }, duration);
-    // }
-    setMessage(text);
+    if (duration) {
+      timeout.current = setTimeout(() => {
+        setMessage(null);
+      }, duration);
+    }
+    setMessage({ text, status });
   };
 
+  // ====== CLEAR MESSAGE ======
+  const clearMessage = () => setMessage(null);
+
   return (
-    <MessageContext.Provider value={{ showMessage, status, setStatus }}>
+    <MessageContext.Provider value={{ showMessage, clearMessage }}>
       {children}
       {message && (
         <div
           className={cn(
-            "absolute top-10 left-[50%] w-max translate-x-[-50%] bg-white",
-            "rounded-sm p-4 text-xl",
+            "bg-light-bkg absolute top-10 left-[50%] w-max translate-x-[-50%]",
+            "rounded-sm border border-gray-600 p-4 text-xl",
           )}
         >
           <p
             className={cn(
-              status === "success" && "text-green-500",
-              status === "error" && "text-red-500",
-              status === "normal" && "text-gray-400",
+              message.status === "success" && "text-green-500",
+              message.status === "error" && "text-red-500",
+              message.status === "normal" && "text-gray-400",
             )}
           >
-            {message}
+            {message.text}
           </p>
         </div>
       )}

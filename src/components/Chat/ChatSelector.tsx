@@ -1,31 +1,22 @@
 import "../../components_css/Chat_CSS/friends.css";
-import { useState, useEffect, useContext, useRef } from "react";
-import { useFetch } from "../../customHooks/useFetch";
+import { useState, useEffect, useRef } from "react";
 import { MiniLoadAnimation } from "../Animation/LoadAnimation";
-import { CurrentChat, socketContext } from "../MyContext";
+import { useCurrentChat } from "../../customHooks/useCurrentChat";
 import { chatListObj } from "../../types/types";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/cn.util";
+import { useMessage } from "../../customHooks/useMessage";
+import { useSocket } from "../../customHooks/useSocket";
 
-export const Spaces = () => {
-  type people = {
-    username: string;
-    chat_id: string;
-  };
-
-  type endPointObj = {
-    url: string;
-    count: number;
-  };
+export const ChatSelector = () => {
+  const { socket } = useSocket();
+  const { currentChat, setCurrChat } = useCurrentChat();
+  const { showMessage } = useMessage();
 
   // const [chats, setChats] = useState<chatListObj[]>([]);
   // const [loading, setLoading] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [peopleList, setPeopleList] = useState<people[]>([]);
   const [searchList, setSearchList] = useState<chatListObj[]>([]);
   const [chatList, setChatList] = useState<chatListObj[]>([]);
-
-  const { currentChat, setCurrChat } = useContext(CurrentChat);
-  const socket = useContext(socketContext);
 
   const chatSearch = useRef<HTMLInputElement>(null);
 
@@ -44,14 +35,36 @@ export const Spaces = () => {
     socket.emit("chat-search", { searchTerm: chatSearch.current?.value });
   };
 
-  // ====== SEND FRIEND REQUEST ======
-  const sendFriendRequest = (chat_id: string) => {
-    socket.emit("friend-request", { recipientId: chat_id });
-  };
-
-  // ====== SEND GROUP REQUEST ======
-  const sendGroupRequest = (groupId: string) => {
-    socket.emit("join-group-request", { groupId });
+  // ====== SEND REQUEST ======
+  const sendRequest = ({
+    recipientId,
+    type,
+  }: {
+    recipientId: string;
+    type: "groupId" | "chat_id";
+  }) => {
+    const id = type === "groupId" ? { groupId: recipientId } : { recipientId };
+    socket
+      .timeout(20000)
+      .emit(
+        type === "chat_id" ? "friend-request" : "join-group-request",
+        id,
+        (
+          err: Error,
+          response: { status: "success" | "error"; msg: string },
+        ) => {
+          if (err) {
+            showMessage({
+              text: "Request failed or timedout!",
+              status: "error",
+            });
+          } else if (response.status === "error") {
+            showMessage({ text: `${response.msg}`, status: "normal" });
+          } else if (response.status === "success") {
+            showMessage({ text: `${response.msg}`, status: response.status });
+          }
+        },
+      );
   };
 
   // ====== CHECK IF USER ALREADY EXISTS IN CHATLIST ======
@@ -78,7 +91,7 @@ export const Spaces = () => {
       .emit("getChatList", (err: Error | null, response: chatListObj[]) => {
         if (err) {
           setLoading(false);
-          console.log("Request failed or timed out!");
+          showMessage({ text: "Request failed or timedout!", status: "error" });
           return;
         } else if (response) {
           console.log("LISTOFCHATS: ", response);
@@ -97,7 +110,7 @@ export const Spaces = () => {
     });
 
     // ====== LISTEN FOR SERVER RESPONSE WHEN USER CLICKS ADD FRIEND ======
-    socket.on("friend-request-server-response", {});
+    // socket.on("friend-request-server-response", {});
 
     return () => {
       socket.off("chat-search");
@@ -189,9 +202,15 @@ export const Spaces = () => {
                   className="bg-dark-bkg rounded-[5px] p-1 text-gray-400"
                   onClick={() => {
                     if (chat.chat_id) {
-                      sendFriendRequest(chat.chat_id);
+                      sendRequest({
+                        recipientId: chat.chat_id,
+                        type: "chat_id",
+                      });
                     } else if (chat.groupId) {
-                      sendGroupRequest(chat.groupId);
+                      sendRequest({
+                        recipientId: chat.groupId,
+                        type: "groupId",
+                      });
                     }
                   }}
                 >

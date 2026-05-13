@@ -1,25 +1,21 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useLayoutEffect,
-  useContext,
-} from "react";
-import { socketContext } from "../MyContext";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import "../../components_css/Chat_CSS/chatSpace.css";
 import { useFetch } from "../../customHooks/useFetch";
-import { CurrentChat } from "../MyContext";
-import { cn } from "../../lib/utils";
+import { useCurrentChat } from "../../customHooks/useCurrentChat";
+import { cn } from "../../utils/cn.util";
+import { useSocket } from "../../customHooks/useSocket";
 
 export const ChatSpace = () => {
-  const socket = useContext(socketContext);
-  const { currentChat } = useContext(CurrentChat);
+  const { socket } = useSocket();
+  const { currentChat } = useCurrentChat();
+
+  const currChat = useRef(currentChat); // doing this to maintain
 
   type msgObj = {
     msg: string;
-    recipientId: string;
     role?: string;
     type: "private" | "group";
+    senderId?: string;
     date?: any;
   };
 
@@ -32,9 +28,8 @@ export const ChatSpace = () => {
   const [message, setMessage] = useState<msgObj>();
   const [endPoint, setEndPoint] = useState<endPointObj>({ url: "", count: 0 });
   const chatBox = useRef<HTMLDivElement>(null);
-  const effectRan = useRef(true);
 
-  // ====== GET ALL MESSAGES WHEN COMPONENT MOUNTS ======
+  // ====== GET ALL MESSAGES BETWEEN USER AND SPECIFIC RECIPIENT WHEN USER ENTERS THEIR CHAT ======
   const listenForAllMessages = () => {
     socket.on("messages", (messages: msgObj[]) => {
       console.log("got messages");
@@ -57,14 +52,20 @@ export const ChatSpace = () => {
 
   // ====== RECIEVE DIRECT MESSAGES ======
   const listenForDirectMessages = () => {
-    socket.on("message", (message: any) => {
-      message.status = "recieving";
+    socket.on("message", (message: msgObj) => {
       console.log(message);
-      setMessages((prevMessages) => {
-        return [...prevMessages, message];
-      });
+      console.log(currChat.current);
+      if (currChat.current?.id === message.senderId) {
+        setMessages((prevMessages) => {
+          return [...prevMessages, message];
+        });
+      }
     });
   };
+
+  useEffect(() => {
+    currChat.current = currentChat;
+  }, [currentChat]);
 
   useEffect(() => {
     listenForDirectMessages();
@@ -120,7 +121,7 @@ export const ChatSpace = () => {
           "flex items-center rounded-full pl-5",
         )}
       >
-        <p>{currentChat.username}</p>
+        <p>{currentChat?.username}</p>
       </div>
 
       {/* ====== MESSAGE BOX ====== */}
@@ -128,26 +129,27 @@ export const ChatSpace = () => {
         className={cn("scroll-bar overflow-y-scroll px-2 py-5")}
         ref={chatBox}
       >
-        {messages.map((currMsg, index) => (
-          <div
-            className={
-              currMsg.role === "sender"
-                ? cn(
-                    "my-3 ml-auto w-max max-w-[70%] bg-orange-700 py-1 pr-4 pl-1 wrap-break-word",
-                    "rounded-tr-[5px] rounded-br-[5px] rounded-bl-[5px]",
-                    "[clip-path:polygon(0%_0%,calc(100%-10px)_0%,calc(100%-10px)_calc(100%-10px),100%_100%,0%_100%)]",
-                  )
-                : cn(
-                    "bg-light-bkg my-3 w-max max-w-[70%] py-1 pr-1 pl-4",
-                    "rounded-tr-[5px] rounded-br-[5px] rounded-bl-[5px] wrap-break-word",
-                    "[clip-path:polygon(0%_0%,10px_10px,10px_100%,100%_100%,100%_0%)]",
-                  )
-            }
-            key={index}
-          >
-            <p>{currMsg.msg}</p>
-          </div>
-        ))}
+        {currentChat &&
+          messages.map((currMsg, index) => (
+            <div
+              className={
+                currMsg.role === "sender"
+                  ? cn(
+                      "my-3 ml-auto w-max max-w-[70%] bg-orange-700 py-1 pr-4 pl-1 wrap-break-word",
+                      "rounded-tr-[5px] rounded-br-[5px] rounded-bl-[5px]",
+                      "[clip-path:polygon(0%_0%,calc(100%-10px)_0%,calc(100%-10px)_calc(100%-10px),100%_100%,0%_100%)]",
+                    )
+                  : cn(
+                      "bg-light-bkg my-3 w-max max-w-[70%] py-1 pr-1 pl-4",
+                      "rounded-tr-[5px] rounded-br-[5px] rounded-bl-[5px] wrap-break-word",
+                      "[clip-path:polygon(0%_0%,10px_10px,10px_100%,100%_100%,100%_0%)]",
+                    )
+              }
+              key={index}
+            >
+              <p>{currMsg.msg}</p>
+            </div>
+          ))}
       </div>
 
       {/* ====== MESSAGING TOOLS ====== */}
@@ -169,12 +171,15 @@ export const ChatSpace = () => {
           id="chat-text-area"
           spellCheck="false"
           onChange={(e) => {
-            setMessage({
-              msg: e.target.value,
-              recipientId: currentChat.id,
-              role: "sender",
-              type: currentChat.type,
-            });
+            if (!currentChat?.id) {
+              console.error("currentChat.id must be provided!");
+            } else {
+              setMessage({
+                msg: e.target.value,
+                role: "sender",
+                type: currentChat.type,
+              });
+            }
           }}
         ></textarea>
         <button
@@ -188,14 +193,25 @@ export const ChatSpace = () => {
               setMessages((prevMessage) => {
                 return [...prevMessage, message];
               });
-              currentChat.type === "private"
-                ? socket.emit("message", message)
-                : socket.emit("group-msg", message);
-              setMessage({
-                msg: "",
-                recipientId: currentChat.id,
-                type: currentChat.type,
-              });
+              currentChat?.type === "private"
+                ? socket.emit("message", {
+                    ...message,
+                    recipientId: currentChat?.id,
+                  })
+                : socket.emit("group-msg", {
+                    ...message,
+                    recipientId: currentChat?.id,
+                  });
+              if (!currentChat?.id || !currentChat?.type) {
+                console.error(
+                  "either currentChat.id or currentChat.type is missing, please make sure both are provided!",
+                );
+              } else {
+                setMessage({
+                  msg: "",
+                  type: currentChat.type,
+                });
+              }
             }
           }}
         >

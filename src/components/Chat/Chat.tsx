@@ -1,12 +1,12 @@
 import { ChatSpace } from "./ChatSpace";
-import { Spaces } from "./Spaces";
+import { ChatSelector } from "./ChatSelector";
 import { chatListObj } from "../../types/types";
-import { cn } from "../../lib/utils";
+import { cn } from "../../utils/cn.util";
 
 export const Chat = () => {
   return (
     <div className={cn("mx-auto mt-[10vh] flex max-w-max")}>
-      <Spaces />
+      <ChatSelector />
       <ChatSpace />
     </div>
   );

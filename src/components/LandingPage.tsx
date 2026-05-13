@@ -1,6 +1,5 @@
-import "../components_css/landingPage.css";
 import { useNavigate } from "react-router-dom";
-import { cn } from "../lib/utils";
+import { cn } from "../utils/cn.util";
 
 export const LandingPage = () => {
   const navigate = useNavigate();

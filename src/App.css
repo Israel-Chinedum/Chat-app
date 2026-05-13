@@ -10,18 +10,33 @@
     #1f2937
   );
   --background-image-split-bkg: linear-gradient(45deg, #030712 20%, #1f2937);
+  --background-image-light-bkg-color: linear-gradient(
+    45deg,
+    #030712,
+    #1f2937 50%,
 
+    #1f2937
+  );
   /* ====== CUSTOM BREAKPOINTS ====== */
   --breakpoint-base: 480px;
 }
 
 body {
-  background: var(--background-image-split-bkg);
+  background: var(--background-image-light-bkg-color);
+
   /* background: black; */
 }
 
 .input {
   @apply rounded-xl border-b border-b-orange-700 p-4 text-xl text-white outline-0;
+}
+
+.rounded-btn1 {
+  @apply bg-btn-hover base:w-max base:px-10 base:py-3 base:text-xl relative w-20 overflow-hidden rounded-full px-3 py-2 text-white;
+}
+
+.rounded-btn2 {
+  @apply bg-button base:w-max base:px-10 base:py-3 base:text-xl relative w-20 overflow-hidden rounded-full px-3 py-2 text-white hover:after:top-0;
 }
 
 .scroll-bar::-webkit-scrollbar {

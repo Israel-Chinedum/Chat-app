@@ -7,7 +7,7 @@ import { LandingPage } from "./components/LandingPage";
 import { LoadAnimation } from "./components/Animation/LoadAnimation";
 import { MessageProvider } from "./context/MessageContext";
 import { useState } from "react";
-import { Home } from "./components/Home";
+import { ComponentProvider } from "./components/ComponentProvider";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,7 +26,7 @@ function App() {
 
               <Route path="/register" element={<Register />} />
 
-              <Route path="/home" element={<Home />} />
+              <Route path="/home" element={<ComponentProvider />} />
             </Routes>
           </LoadAnimationContext.Provider>
         </div>

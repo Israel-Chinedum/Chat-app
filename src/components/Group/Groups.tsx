@@ -1,51 +1,47 @@
-import "../../components_css/Group_CSS/groups.css";
-import { useState, useRef } from "react";
-import { useMessage } from "../../customHooks/useMessage";
+import { useState } from "react";
 import { AllGroups } from "./AllGroups";
 import { MyGroups } from "./Mygroups";
 import { NewGroup } from "./NewGroup";
+import { cn } from "../../utils/cn.util";
 
-export const Groups = ({
-  setCurrentTab,
-}: {
-  setCurrentTab: (currentTab: string) => void;
-}) => {
-  const { showing, setShowing } = display();
-
+export const Groups = () => {
   const [currTab, setCurrTab] = useState<string>("all-groups");
-
-  // const mounted = useRef<boolean>(false);
-  const msg = useRef<string>("");
+  const tabList = [
+    { name: "All Groups", value: "all-groups" },
+    { name: "My Groups", value: "my-groups" },
+    { name: "New Group", value: "new-group" },
+  ];
 
   return (
-    <div id="groups-container">
+    <div className={cn("mx-auto h-[70vh] w-[80%]")}>
       {/* ===== NAVIGATION BAR ===== */}
-      <nav id="nav-bar">
-        <ul id="tabs">
-          <li className="tab" onClick={() => setCurrTab("all-groups")}>
-            All Groups
-          </li>
-          <li className="tab" onClick={() => setCurrTab("my-groups")}>
-            My Groups
-          </li>
-          <li className="tab" onClick={() => setCurrTab("new-group")}>
-            New Group
-          </li>
+      <nav className={cn("px-4 py-8")}>
+        <ul className={cn("flex justify-center gap-20")}>
+          {tabList.map((tab, index) => (
+            <li
+              key={index}
+              className={cn(
+                currTab === tab.value && "bg-dark-bkg text-orange-700",
+                "hover:bg-dark-bkg hover:text-orange-700",
+                "cursor-pointer rounded-md p-3",
+              )}
+              onClick={() => setCurrTab(tab.value)}
+            >
+              {tab.name}
+            </li>
+          ))}
         </ul>
       </nav>
 
       <div id="grp-container-sections">
-        {showing && <p id="grp-msg">{msg.current}</p>}
         {/* ===== ALL GROUPS ===== */}
-        {currTab == "all-groups" && <AllGroups setSpace={setCurrentTab} />}
+        {currTab == "all-groups" && <AllGroups setCurrTab={setCurrTab} />}
 
         {/* ====== MY GROUPS ====== */}
-        {currTab == "my-groups" && <MyGroups />}
+        {currTab == "my-groups" && <MyGroups setCurrTab={setCurrTab} />}
 
         {/* ===== NEW GROUP ===== */}
-        {currTab == "new-group" && (
-          <NewGroup setShowing={setShowing} msg={msg.current} />
-        )}
+        {currTab == "new-group" && <NewGroup />}
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
-import "../components_css/login.css";
 import { useState, useEffect } from "react";
 import { useFetch } from "../customHooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { useMessage } from "../customHooks/useMessage";
-import { cn } from "../lib/utils";
+import { cn } from "../utils/cn.util";
+import { initiateSocketConnection } from "../utils/initiateSocketConnection";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [endPoint, setEndPoint] = useState<endPointObj>({ url: "", count: 0 });
 
-  const { showMessage, setStatus } = useMessage();
+  const { showMessage } = useMessage();
 
   const { response, error } = useFetch({
     method: "post",
@@ -27,10 +27,13 @@ export const Login = () => {
 
   useEffect(() => {
     if (error.message) {
-      setStatus("error");
-      showMessage({ text: error.message, duration: 3000 });
+      showMessage({ text: error.message, status: "error" });
+      return;
     }
-    response.message && navigate("/home");
+    if (response.message) {
+      initiateSocketConnection();
+      navigate("/home");
+    }
   }, [error, response]);
 
   return (
